@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hold my secret</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"
+      integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-slate-950 text-gray-50">
+    <div class="m-auto max-w-4xl px-6 pt-4">
+      <h1 class="mb-4 text-2xl font-bold">Hold my secret!</h1>
+      <div class="mb-6 rounded border border-dashed px-3 pb-3 pt-2">
+        <h3 class="text-1xl mb-4 font-bold">Encrypt</h3>
+        <div class="flex space-x-4">
+          <form name="encrypt" class="basis-1/2 space-y-3">
+            <div class="">
+              <textarea
+                type="text"
+                name="text"
+                required
+                class="w-full rounded border-2 border-gray-500 px-4 py-2 text-gray-950"
+                placeholder="Type your plain text here..."
+              ></textarea>
+              <div class="error-message text-red-500" data-field="text"></div>
+            </div>
+            <div class="">
+              <div class="flex flex-grow">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Type your password here..."
+                  required
+                  class="flex-grow rounded rounded-r-none border-2 border-r-0 border-gray-500 px-4 py-2 text-gray-950"
+                />
+                <button
+                  type="button"
+                  class="btn-see rounded rounded-l-none border-2 border-l-0 border-blue-800 bg-blue-600 px-2 py-2 hover:bg-blue-500 active:bg-blue-700"
+                >
+                  See
+                </button>
+              </div>
+              <div class="error-message text-red-500" data-field="password"></div>
+            </div>
+            <button
+              type="submit"
+              class="rounded border-2 border-green-800 bg-green-600 px-3 py-2 hover:bg-green-500 active:bg-green-700"
+            >
+              Encrypt!
+            </button>
+          </form>
+          <div class="basis-1/2 space-y-2">
+            <h2>Encrypted text</h2>
+            <p
+              id="encrypted"
+              class="p-3 font-mono bg-slate-800 rounded text-yellow-400 min-h-[48px] break-all"
+            ></p>
+            <p
+              id="encrypted-hex"
+              class="p-3 font-mono bg-slate-800 rounded text-green-400 min-h-[48px] break-all"
+            ></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-6 rounded border border-dashed px-3 pb-3 pt-2">
+        <h3 class="text-1xl mb-4 font-bold">Decrypt</h3>
+        <div class="flex space-x-4">
+          <form name="decrypt" class="basis-1/2 space-y-3">
+            <div class="">
+              <textarea
+                type="text"
+                name="text"
+                placeholder="Type your password here..."
+                required
+                class="w-full rounded border-2 border-gray-500 px-4 py-2 text-gray-950"
+              ></textarea>
+              <div class="error-message text-red-500" data-field="text"></div>
+            </div>
+            <div class="">
+              <div class="flex flex-grow">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Type your password here..."
+                  required
+                  class="flex-grow rounded rounded-r-none border-2 border-r-0 border-gray-500 px-4 py-2 text-gray-950"
+                />
+                <button
+                  type="button"
+                  class="btn-see rounded rounded-l-none border-2 border-l-0 border-blue-800 bg-blue-600 px-2 py-2 hover:bg-blue-500 active:bg-blue-700"
+                >
+                  See
+                </button>
+              </div>
+              <div class="error-message text-red-500" data-field="password"></div>
+            </div>
+
+            <button
+              type="submit"
+              class="rounded border-2 border-purple-800 bg-purple-600 px-3 py-2 hover:bg-purple-500 active:bg-purple-700"
+            >
+              Decrypt!
+            </button>
+          </form>
+          <div class="basis-1/2 space-y-2">
+            <h2>Decrypted text</h2>
+            <p
+              id="decrypted"
+              class="p-3 font-mono bg-slate-800 rounded text-red-500 min-h-[48px] break-all"
+            ></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./main.js"></script>
+  </body>
+</html>

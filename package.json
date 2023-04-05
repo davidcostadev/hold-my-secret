@@ -1,0 +1,16 @@
+{
+  "name": "secret",
+  "version": "1.0.0",
+  "source": "src/index.html",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build"
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "dependencies": {},
+  "devDependencies": {
+    "crypto-js": "^4.1.1",
+    "parcel": "^2.8.3"
+  }
+}
