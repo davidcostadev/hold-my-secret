@@ -124,3 +124,17 @@ window.onload = () => {
     btn.addEventListener('touchend', hidePassword);
   }
 };
+
+// get the element by id  and copy to clipboard on click needs to be generic to be used everywhere on click element
+function copyToClipboard(id) {
+  const el = document.getElementById(id);
+  el.addEventListener('click', () => {
+    const text = el.innerHTML;
+    navigator.clipboard.writeText(text);
+  });
+}
+
+copyToClipboard('encrypted');
+copyToClipboard('encrypted-hex');
+copyToClipboard('decrypted');
+copyToClipboard('decrypted-hex');
