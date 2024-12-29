@@ -71,6 +71,8 @@ const handleEncryptForm = (event) => {
   password.value = password.value.trim();
 
   const [encrypted, hex] = myEncrypt(text.value.trim(), password.value.trim());
+  document.getElementById('encrypted-container').classList.remove('hidden');
+  document.getElementById('encrypted-container').classList.add('block');
 
   document.getElementById('encrypted').innerHTML = encrypted;
   document.getElementById('encrypted-hex').innerHTML = hex;
@@ -89,6 +91,9 @@ const handleDecryptForm = (event) => {
   password.value = password.value.trim();
 
   const decrypted = myDecrypt(text.value.trim(), password.value.trim());
+
+  document.getElementById('decrypted-container').classList.remove('hidden');
+  document.getElementById('decrypted-container').classList.add('block');
 
   document.getElementById('decrypted').innerHTML = decrypted;
 };

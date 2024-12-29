@@ -28,7 +28,7 @@
       <h1 class="mb-4 text-2xl font-bold">Hold my secret!</h1>
 
       <div
-        class="flex flex-col gap-1"
+        class="flex flex-col gap-2"
         data-testid="form-control-master-password"
         id="form-control-master-password"
       >
@@ -53,9 +53,9 @@
       </div>
 
       <div
-        class="mb-6 sm:rounded sm:border sm:border-dashed sm:px-3 sm:pb-3 sm:pt-2 border-b-2 pb-5 border-dashed border-slate-500"
+        class="mb-6 sm:rounded sm:border sm:border-dashed sm:px-3 sm:pb-3 sm:pt-2 border-b-2 pb-5 border-dashed border-slate-500 flex flex-col gap-2"
       >
-        <h3 class="text-1xl mb-4 font-bold">Encrypt</h3>
+        <h3 class="text-1xl font-bold">Encrypt</h3>
         <div class="flex flex-col sm:flex-row space-y-8 sm:space-y-0 sm:space-x-4">
           <form name="encrypt" class="basis-1/2 space-y-3">
             <div class="">
@@ -68,14 +68,16 @@
               ></textarea>
               <div class="error-message text-red-500" data-field="text"></div>
             </div>
-            <button
-              type="submit"
-              class="rounded border-2 border-green-800 bg-green-600 px-3 py-2 hover:bg-green-500 active:bg-green-700"
-            >
-              Encrypt!
-            </button>
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                class="rounded border-2 border-green-800 bg-green-600 px-3 py-2 hover:bg-green-500 active:bg-green-700"
+              >
+                Encrypt!
+              </button>
+            </div>
           </form>
-          <div class="basis-1/2 space-y-2">
+          <div class="basis-1/2 space-y-2 hidden" id="encrypted-container">
             <h2>Encrypted text</h2>
             <p
               id="encrypted"
@@ -89,8 +91,10 @@
         </div>
       </div>
 
-      <div class="sm:rounded sm:border sm:border-dashed sm:px-3 sm:pb-3 sm:pt-2 border-slate-500">
-        <h3 class="text-1xl mb-4 font-bold">Decrypt</h3>
+      <div
+        class="sm:rounded sm:border sm:border-dashed sm:px-3 sm:pb-3 sm:pt-2 border-slate-500 flex flex-col gap-2"
+      >
+        <h3 class="text-1xl font-bold">Decrypt</h3>
         <div class="flex flex-col sm:flex-row space-y-8 sm:space-y-0 sm:space-x-4">
           <form name="decrypt" class="basis-1/2 space-y-3">
             <div class="">
@@ -103,14 +107,16 @@
               ></textarea>
               <div class="error-message text-red-500" data-field="text"></div>
             </div>
-            <button
-              type="submit"
-              class="rounded border-2 border-purple-800 bg-purple-600 px-3 py-2 hover:bg-purple-500 active:bg-purple-700"
-            >
-              Decrypt!
-            </button>
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                class="rounded border-2 border-purple-800 bg-purple-600 px-3 py-2 hover:bg-purple-500 active:bg-purple-700"
+              >
+                Decrypt!
+              </button>
+            </div>
           </form>
-          <div class="basis-1/2 space-y-2">
+          <div class="basis-1/2 space-y-2 hidden" id="decrypted-container">
             <h2>Decrypted text</h2>
             <p
               id="decrypted"
