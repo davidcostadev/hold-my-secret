@@ -22,7 +22,10 @@ const myDecrypt = (text, key) => {
 
 /** @type {(form: HTMLFormElement) => boolean} */
 const isFormValid = (form) => {
-  const { password, text } = form.elements;
+  const { text } = form.elements;
+
+  const formControlMasterPassword = document.getElementById('form-control-master-password');
+  const password = document.getElementById('master-password');
 
   const textValue = text.value.trim();
   const passwordValue = password.value.trim();
@@ -40,11 +43,15 @@ const isFormValid = (form) => {
   }
   if (passwordValue === '') {
     /** @type {HTMLDivElement} */
-    const errorMessage = form.querySelector('.error-message[data-field="password"]');
+    const errorMessage = formControlMasterPassword.querySelector(
+      '.error-message[data-field="password"]'
+    );
     errorMessage.innerHTML = 'Please enter a password';
     hasError = true;
   } else {
-    const errorMessage = form.querySelector('.error-message[data-field="password"]');
+    const errorMessage = formControlMasterPassword.querySelector(
+      '.error-message[data-field="password"]'
+    );
     errorMessage.innerHTML = '';
   }
   return !hasError;
@@ -54,7 +61,9 @@ const isFormValid = (form) => {
 const handleEncryptForm = (event) => {
   event.preventDefault();
 
-  const { password, text } = event.target.elements;
+  const { text } = event.target.elements;
+  const password = document.getElementById('master-password');
+
   console.log(isFormValid(event.target));
   if (!isFormValid(event.target)) return;
 
@@ -71,7 +80,8 @@ const handleEncryptForm = (event) => {
 const handleDecryptForm = (event) => {
   event.preventDefault();
 
-  const { password, text } = event.target.elements;
+  const { text } = event.target.elements;
+  const password = document.getElementById('master-password');
 
   if (!isFormValid(event.target)) return;
 
@@ -88,21 +98,24 @@ document.forms['decrypt'].onsubmit = handleDecryptForm;
 
 window.onload = () => {
   const btns = document.getElementsByClassName('btn-see');
+  /** @type {HTMLButtonElement} */
+  const showPassword = (event) => {
+    const masterPassword = document.getElementById('master-password');
+    masterPassword.setAttribute('type', 'text');
+  };
+  /** @type {HTMLButtonElement} */
+  const hidePassword = (event) => {
+    const masterPassword = document.getElementById('master-password');
+    masterPassword.setAttribute('type', 'password');
+  };
 
   for (let i = 0; i < btns.length; i++) {
     /**  @type {HTMLButtonElement} */
     const btn = btns[i];
-    btn.addEventListener('mousedown', (event) => {
-      /**  @type {{ password: HTMLInputElement }} */
-      const { password } = event.target.form.elements;
-      password.setAttribute('type', 'text');
-    });
-    btn.addEventListener('mouseup', (event) => {
-      /**  @type {{ password: HTMLInputElement }} */
-      const { password } = event.target.form.elements;
-      password.setAttribute('type', 'password');
-    });
+    btn.addEventListener('mousedown', showPassword);
+    btn.addEventListener('mouseup', hidePassword);
+    // capture event on mobile
+    btn.addEventListener('touchstart', showPassword);
+    btn.addEventListener('touchend', hidePassword);
   }
 };
-
-console.log('oi');
