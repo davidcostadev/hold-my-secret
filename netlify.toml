@@ -1,3 +1,7 @@
+[build]
+  command = "pnpm build"
+  publish = "dist"
+
 # pnpm 11 (package.json "packageManager") requires Node >= 22.13.
 [build.environment]
   NODE_VERSION = "22"
