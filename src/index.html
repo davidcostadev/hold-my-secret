@@ -5,31 +5,25 @@
     <title>Hold my secret</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="./index.css" rel="stylesheet" />
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"
-      integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T3V4ZBPR7V"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-
-      gtag('config', 'G-T3V4ZBPR7V');
-    </script>
   </head>
   <body class="bg-slate-950 text-gray-50">
     <div class="m-auto max-w-4xl px-3 sm:px-6 py-4">
-      <h1 class="mb-4 text-2xl font-bold">Hold my secret!</h1>
+      <header class="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <h1 class="text-2xl font-bold">Hold my secret!</h1>
+        <div class="flex items-center gap-3 text-sm">
+          <span id="auto-clear-clock" class="font-mono text-slate-400">Auto-clear in 30:00</span>
+          <button
+            type="button"
+            id="clear-all"
+            class="rounded border-2 border-slate-600 bg-slate-800 px-2 py-1 hover:bg-slate-700 active:bg-slate-900"
+          >
+            Clear all
+          </button>
+        </div>
+      </header>
 
       <div
         class="flex flex-col gap-2 border-b-2 border-slate-500 border-dashed sm:pb-3 pb-5 mb-6 sm:border-b-0 sm:mb-0"
-        data-testid="form-control-master-password"
         id="form-control-master-password"
       >
         <label for="master-password" class="text-1xl font-bold">Master password</label>
@@ -39,17 +33,35 @@
             name="password"
             id="master-password"
             placeholder="Type your password here..."
-            required
-            class="flex-grow rounded rounded-r-none border-2 border-r-0 border-gray-500 px-4 py-2 text-gray-950"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            class="flex-grow min-w-0 rounded rounded-r-none border-2 border-r-0 border-gray-500 px-4 py-2 text-gray-950"
           />
           <button
             type="button"
-            class="btn-see rounded rounded-l-none border-2 border-l-0 border-blue-800 bg-blue-600 px-2 py-2 hover:bg-blue-500 active:bg-blue-700"
+            id="see-password"
+            aria-label="Hold to show password"
+            class="hold-reveal touch-none select-none rounded rounded-l-none border-2 border-l-0 border-blue-800 bg-blue-600 px-2 py-2 hover:bg-blue-500 active:bg-blue-700"
           >
             See
           </button>
         </div>
-        <div class="error-message text-red-500" data-field="password"></div>
+        <div class="error-message text-red-500" id="password-error"></div>
+
+        <div id="meter" class="hidden space-y-1 text-sm">
+          <div class="flex gap-1" aria-hidden="true">
+            <div class="meter-segment h-1.5 flex-1 rounded bg-slate-700"></div>
+            <div class="meter-segment h-1.5 flex-1 rounded bg-slate-700"></div>
+            <div class="meter-segment h-1.5 flex-1 rounded bg-slate-700"></div>
+            <div class="meter-segment h-1.5 flex-1 rounded bg-slate-700"></div>
+          </div>
+          <div class="flex flex-wrap justify-between gap-x-3">
+            <span><span id="meter-label" class="font-bold"></span> <span id="meter-bits" class="text-slate-400"></span></span>
+            <span class="text-slate-400">Time to crack: <span id="meter-crack"></span></span>
+          </div>
+        </div>
       </div>
 
       <div
@@ -57,36 +69,105 @@
       >
         <h3 class="text-1xl font-bold">Encrypt</h3>
         <div class="flex flex-col sm:flex-row space-y-8 sm:space-y-0 sm:space-x-4">
-          <form name="encrypt" class="basis-1/2 space-y-3">
-            <div class="">
-              <textarea
-                type="text"
-                name="text"
-                required
-                class="w-full rounded border-2 border-gray-500 px-4 py-2 text-gray-950"
-                placeholder="Type your plain text here..."
-              ></textarea>
-              <div class="error-message text-red-500" data-field="text"></div>
+          <form name="encrypt" class="basis-1/2 space-y-3" novalidate>
+            <div>
+              <div class="relative">
+                <textarea
+                  name="text"
+                  id="encrypt-text"
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  rows="3"
+                  class="auto-grow block max-h-80 w-full resize-none rounded border-2 border-gray-500 px-4 py-2 text-gray-950"
+                  placeholder="Type your plain text here..."
+                ></textarea>
+                <button
+                  type="button"
+                  id="encrypt-veil"
+                  class="absolute inset-0 hidden w-full items-center justify-center rounded font-bold text-slate-900"
+                >
+                  •••••• Click to edit
+                </button>
+              </div>
+              <div class="error-message text-red-500" id="encrypt-error"></div>
             </div>
             <div class="flex justify-end">
               <button
                 type="submit"
-                class="rounded border-2 border-green-800 bg-green-600 px-3 py-2 hover:bg-green-500 active:bg-green-700"
+                id="encrypt-button"
+                class="rounded border-2 border-green-800 bg-green-600 px-3 py-2 hover:bg-green-500 active:bg-green-700 disabled:cursor-wait disabled:opacity-60"
               >
                 Encrypt!
               </button>
             </div>
           </form>
           <div class="basis-1/2 space-y-2 hidden" id="encrypted-container">
-            <h2>Encrypted text</h2>
-            <p
-              id="encrypted"
-              class="p-3 font-mono bg-slate-800 rounded text-yellow-400 min-h-[48px] break-all active:bg-slate-900"
-            ></p>
-            <p
-              id="encrypted-hex"
-              class="p-3 font-mono bg-slate-800 rounded text-green-400 min-h-[48px] break-all active:bg-slate-900"
-            ></p>
+            <h2>Base64</h2>
+            <div class="flex">
+              <p
+                id="encrypted"
+                role="button"
+                tabindex="0"
+                title="Click to copy"
+                class="copyable cursor-pointer flex-grow min-w-0 p-3 font-mono bg-slate-800 rounded rounded-r-none text-yellow-400 min-h-[48px] break-all active:bg-slate-900"
+              ></p>
+              <button
+                type="button"
+                data-copy="encrypted"
+                aria-label="Copy"
+                title="Copy"
+                class="copy-button rounded rounded-l-none border-l border-slate-600 bg-slate-700 px-3 hover:bg-slate-600 active:bg-slate-800"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="pointer-events-none h-5 w-5"
+                  aria-hidden="true"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+              </button>
+            </div>
+            <h2>Hex</h2>
+            <div class="flex">
+              <p
+                id="encrypted-hex"
+                role="button"
+                tabindex="0"
+                title="Click to copy"
+                class="copyable cursor-pointer flex-grow min-w-0 p-3 font-mono bg-slate-800 rounded rounded-r-none text-green-400 min-h-[48px] break-all active:bg-slate-900"
+              ></p>
+              <button
+                type="button"
+                data-copy="encrypted-hex"
+                aria-label="Copy"
+                title="Copy"
+                class="copy-button rounded rounded-l-none border-l border-slate-600 bg-slate-700 px-3 hover:bg-slate-600 active:bg-slate-800"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="pointer-events-none h-5 w-5"
+                  aria-hidden="true"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -96,21 +177,26 @@
       >
         <h3 class="text-1xl font-bold">Decrypt</h3>
         <div class="flex flex-col sm:flex-row space-y-8 sm:space-y-0 sm:space-x-4">
-          <form name="decrypt" class="basis-1/2 space-y-3">
-            <div class="">
+          <form name="decrypt" class="basis-1/2 space-y-3" novalidate>
+            <div>
               <textarea
-                type="text"
                 name="text"
-                placeholder="Type your password here..."
-                required
-                class="w-full rounded border-2 border-gray-500 px-4 py-2 text-gray-950"
+                id="decrypt-text"
+                placeholder="Paste the encrypted text (Base64 or Hex)..."
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                rows="3"
+                class="auto-grow block max-h-80 w-full resize-none rounded border-2 border-gray-500 px-4 py-2 text-gray-950"
               ></textarea>
-              <div class="error-message text-red-500" data-field="text"></div>
+              <div class="error-message text-red-500" id="decrypt-error"></div>
             </div>
             <div class="flex justify-end">
               <button
                 type="submit"
-                class="rounded border-2 border-purple-800 bg-purple-600 px-3 py-2 hover:bg-purple-500 active:bg-purple-700"
+                id="decrypt-button"
+                class="rounded border-2 border-purple-800 bg-purple-600 px-3 py-2 hover:bg-purple-500 active:bg-purple-700 disabled:cursor-wait disabled:opacity-60"
               >
                 Decrypt!
               </button>
@@ -118,14 +204,114 @@
           </form>
           <div class="basis-1/2 space-y-2 hidden" id="decrypted-container">
             <h2>Decrypted text</h2>
-            <p
-              id="decrypted"
-              class="p-3 font-mono bg-slate-800 rounded text-red-500 min-h-[48px] break-all active:bg-slate-900"
-            ></p>
+            <div class="flex">
+              <p
+                id="decrypted"
+                role="button"
+                tabindex="0"
+                title="Click to copy"
+                class="copyable cursor-pointer flex-grow min-w-0 p-3 font-mono bg-slate-800 rounded rounded-r-none text-red-500 min-h-[48px] break-all whitespace-pre-wrap active:bg-slate-900"
+              ></p>
+              <button
+                type="button"
+                id="reveal-decrypted"
+                aria-label="Hold to reveal"
+                title="Hold to reveal"
+                class="hold-reveal touch-none select-none bg-slate-700 px-3 hover:bg-slate-600 active:bg-slate-800"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="pointer-events-none h-5 w-5"
+                  aria-hidden="true"
+                >
+                  <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                data-copy="decrypted"
+                aria-label="Copy"
+                title="Copy"
+                class="copy-button rounded rounded-l-none border-l border-slate-600 bg-slate-700 px-3 hover:bg-slate-600 active:bg-slate-800"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="pointer-events-none h-5 w-5"
+                  aria-hidden="true"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+              </button>
+            </div>
+            <div id="legacy-notice" class="hidden space-y-2 rounded border border-amber-600 p-3 text-sm text-amber-300">
+              <p>Old format — change your password and re-encrypt.</p>
+              <div class="flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  id="reencrypt-button"
+                  class="rounded border-2 border-green-800 bg-green-600 px-3 py-1 text-gray-50 hover:bg-green-500 active:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  Re-encrypt
+                </button>
+                <span id="reencrypt-hint" class="hidden text-slate-400">Use at least 12 characters</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      <footer class="mt-10 border-t border-slate-700 pt-4 text-sm text-slate-400">
+        <h2 class="mb-2 font-bold text-slate-200">How it works</h2>
+        <ul class="list-disc space-y-1 pl-5">
+          <li>
+            Everything is encrypted and decrypted <strong>in your browser</strong>. Nothing is sent anywhere — the
+            page is technically blocked from making network requests.
+          </li>
+          <li>
+            Encryption uses
+            <a class="underline hover:text-slate-200" href="https://age-encryption.org" rel="noreferrer">age</a>
+            (scrypt + ChaCha20-Poly1305), an open, documented standard. You can decrypt without this site:
+            <code class="text-slate-300">age -d</code>.
+          </li>
+          <li><strong>If you lose the password, nobody can recover the secret.</strong></li>
+          <li>Send the password through a <strong>different channel</strong> than the encrypted text.</li>
+          <li>Old-format texts (before age) still open, but are less secure — re-encrypt them.</li>
+          <li>Spaces at the start/end of the password are ignored.</li>
+          <li>Auto-clears after 30 min idle. Close the tab when done.</li>
+          <li>
+            Source code:
+            <a
+              class="underline hover:text-slate-200"
+              href="https://github.com/davidcostadev/hold-my-secret"
+              rel="noreferrer"
+              >https://github.com/davidcostadev/hold-my-secret</a
+            >
+          </li>
+        </ul>
+      </footer>
     </div>
-    <script src="./main.js"></script>
+
+    <div
+      id="toast"
+      role="status"
+      aria-live="polite"
+      class="pointer-events-none fixed bottom-4 left-1/2 -translate-x-1/2 rounded bg-slate-100 px-4 py-2 text-sm text-slate-900 shadow-lg opacity-0 transition-opacity"
+    ></div>
+
+    <script type="module" src="./main.js"></script>
   </body>
 </html>

@@ -9,11 +9,16 @@
   },
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "dependencies": {
+    "age-encryption": "0.3.1",
+    "crypto-js": "4.1.1",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.3.1"
   },
   "devDependencies": {
-    "crypto-js": "^4.1.1",
     "parcel": "^2.8.3"
-  }
+  },
+  "alias": {
+    "crypto": false
+  },
+  "packageManager": "pnpm@11.28.5"
 }

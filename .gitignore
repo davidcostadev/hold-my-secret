@@ -1,6 +1,5 @@
 .parcel-cache
 node_modules
-dist
+dist/*
 !dist/_redirects
-
-
+!dist/_headers
